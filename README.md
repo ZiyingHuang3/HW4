@@ -1,6 +1,7 @@
 # HW4
 ## Devlog
-Write your Devlog here!
+I used model-view-controller to separate player control from UI, scoring, and audio systems, allowing each system to respond independently through events. For example, the Bird class acts as a controller by handling player input and collisions. In the Update() method, the bird listens for player input (Input.GetKeyDown(KeyCode.Space)) and applies upward velocity to the Rigidbody2D to make the bird flap. The Bird class also detects collisions in OnCollisionEnter2D(), and when the bird collides with a pipe, it triggers a death event by calling GameEvent.RaiseDied(). When the player passes through a trigger collider without colliding with a pipe, OnTriggerEnter2D() is called and ScoreManager.Instance.AddPoint() is executed. The view side of the pattern like UI and audio scripts that only react to game state changes.
+The ScoreUI class is for displaying the player’s score. It subscribes to the GameEvent.OnScoreChanged event in OnEnable() and updates the text in the Refresh(int score) method when the event is raised. The AudioManager listens to events such as GameEvent.RaiseFlap(), GameEvent.RaiseScore(), and GameEvent.RaiseDied(). This allows sound effects to play when actions occur. The GameEvent class defines static events such as OnScoreChanged, Flap, and Died. Control scripts raise these events. Singleton pattern ensure there is only one instance managing the player’s score. The static Instance property allows other scripts, such as ScoreTrigger, to access scoring functionality without needing direct references in the scene.
 
 ## Open-Source Assets
 If you added any other assets, list them here!
